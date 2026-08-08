@@ -3,17 +3,38 @@ package main
 import (
 	"log"
 
-	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/config"
+	"ecommerce-api/internal/http/router"
+	"ecommerce-api/internal/permission"
+	"ecommerce-api/internal/platform/database"
 )
 
 func main() {
 	cfg := config.Load()
+
+	db, err := database.NewPostgres(cfg.DatabaseURL)
+	if err != nil {
+		log.Fatal("database connection failed: ", err)
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatal("failed to get database instance: ", err)
+	}
+
+	defer sqlDB.Close()
+
+	log.Println("database connected successfully")
+
+	if err := db.AutoMigrate(&permission.Permission{}); err != nil {
+		log.Fatal("database migration failed: ", err)
+	}
+
+	log.Println("database models synchronized successfully")
+
 	app := router.New()
 
-
-	err := app.Run(":" + cfg.AppPort)
-	if err != nil {
-		log.Fatal("failed to start server:", err)
+	if err := app.Run(":" + cfg.AppPort); err != nil {
+		log.Fatal("failed to start server: ", err)
 	}
 }
