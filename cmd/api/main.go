@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
-
 	"ecommerce-api/internal/config"
 	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/permission"
 	"ecommerce-api/internal/platform/database"
 	"ecommerce-api/internal/role"
+	"ecommerce-api/internal/seed"
 	"ecommerce-api/internal/user"
+	"log"
 )
 
 func main() {
@@ -36,7 +36,11 @@ func main() {
 	}
 
 	log.Println("database models synchronized successfully")
-
+	if err := seed.Run(db); err != nil {
+		log.Fatal("database seed failed: ", err)
+	}
+	log.Println("database seeded successfully")
+	
 	app := router.New()
 
 	if err := app.Run(":" + cfg.AppPort); err != nil {
