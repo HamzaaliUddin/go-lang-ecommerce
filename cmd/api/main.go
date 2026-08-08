@@ -7,6 +7,8 @@ import (
 	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/permission"
 	"ecommerce-api/internal/platform/database"
+	"ecommerce-api/internal/role"
+	"ecommerce-api/internal/user"
 )
 
 func main() {
@@ -26,7 +28,10 @@ func main() {
 
 	log.Println("database connected successfully")
 
-	if err := db.AutoMigrate(&permission.Permission{}); err != nil {
+	if err := db.AutoMigrate(
+		&permission.Permission{},
+		&role.Role{},
+		&user.User{}); err != nil {
 		log.Fatal("database migration failed: ", err)
 	}
 
