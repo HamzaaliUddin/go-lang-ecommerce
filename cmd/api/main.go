@@ -36,7 +36,7 @@ func main() {
 	}
 
 	log.Println("database models synchronized successfully")
-	if err := seed.Run(db); err != nil {
+	if err := seed.Run(db, cfg); err != nil {
 		log.Fatal("database seed failed: ", err)
 	}
 	log.Println("database seeded successfully")

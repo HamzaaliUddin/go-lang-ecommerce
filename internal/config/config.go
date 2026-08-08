@@ -12,6 +12,11 @@ type Config struct {
 	AppEnv      string
 	DatabaseURL string
 	JWTSecret   string
+
+	SuperAdminFirstName string
+	SuperAdminLastName  string
+	SuperAdminEmail     string
+	SuperAdminPassword  string
 }
 
 func Load() Config {
@@ -26,5 +31,9 @@ func Load() Config {
 		AppEnv:      os.Getenv("APP_ENV"),
 		DatabaseURL: os.Getenv("DATABASE_URL"),
 		JWTSecret:   os.Getenv("JWT_SECRET"),
+		SuperAdminFirstName: os.Getenv("SUPER_ADMIN_FIRST_NAME"),
+		SuperAdminLastName:  os.Getenv("SUPER_ADMIN_LAST_NAME"),
+		SuperAdminEmail:     os.Getenv("SUPER_ADMIN_EMAIL"),
+		SuperAdminPassword:  os.Getenv("SUPER_ADMIN_PASSWORD"),
 	}
 }
