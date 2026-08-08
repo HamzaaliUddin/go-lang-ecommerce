@@ -1,0 +1,30 @@
+package config
+
+import (
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+)
+
+type Config struct {
+	AppPort     string
+	AppEnv      string
+	DatabaseURL string
+	JWTSecret   string
+}
+
+func Load() Config {
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Println("Warning: .env file not found")
+	}
+
+	return Config{
+		AppPort:     os.Getenv("APP_PORT"),
+		AppEnv:      os.Getenv("APP_ENV"),
+		DatabaseURL: os.Getenv("DATABASE_URL"),
+		JWTSecret:   os.Getenv("JWT_SECRET"),
+	}
+}
