@@ -1,0 +1,18 @@
+# Environment variables
+.env
+.env.*
+
+# Build files
+bin/
+*.exe
+
+# Temporary files
+tmp/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
