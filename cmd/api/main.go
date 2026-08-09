@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ecommerce-api/internal/auth"
 	"ecommerce-api/internal/config"
 	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/permission"
@@ -41,7 +42,16 @@ func main() {
 	}
 	log.Println("database seeded successfully")
 	
-	app := router.New()
+	userRepository := user.NewRepository(db)
+
+	authService := auth.NewService(
+		userRepository,
+		cfg.JWTSecret,
+)
+
+	authHandler := auth.NewHandler(authService)	
+
+	app := router.New(authHandler)
 
 	if err := app.Run(":" + cfg.AppPort); err != nil {
 		log.Fatal("failed to start server: ", err)

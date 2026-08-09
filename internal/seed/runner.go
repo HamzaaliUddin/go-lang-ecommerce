@@ -22,6 +22,9 @@ func Run(db *gorm.DB, cfg config.Config) error {
 	if err := seedSuperAdmin(db, cfg); err != nil {
 		return err
 	}
+	if err := seedCustomers(db); err != nil {
+	return err
+}
 
 	return nil
 }

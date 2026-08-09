@@ -1,14 +1,14 @@
 package router
 
 import (
-	"net/http"
-
+	"ecommerce-api/internal/auth"
 	appMiddleware "ecommerce-api/internal/http/middleware"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func New() *gin.Engine {
+func New(authHandler *auth.Handler) *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Logger())
@@ -26,5 +26,6 @@ func New() *gin.Engine {
 		})
 	})
 
+	auth.RegisterRoutes(api, authHandler)
 	return router
 }
