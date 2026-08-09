@@ -34,3 +34,4 @@ func (r *Repository) FindBySlug(slug string) (*Role, error) {
 
 	return &role, nil
 }
+

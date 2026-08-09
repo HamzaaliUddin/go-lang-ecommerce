@@ -8,9 +8,6 @@ func RegisterRoutes(
 ) {
 	authRoutes := router.Group("/auth")
 
-	authRoutes.POST(
-		"/login",
-		handler.Login,
-	)
+	authRoutes.POST("/login",handler.Login)
 	authRoutes.POST("/sign-up", handler.SignUp)
 }

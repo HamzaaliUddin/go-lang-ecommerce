@@ -105,3 +105,29 @@ func (r *Repository) Delete(account *User) error {
 		return nil
 	})
 }
+
+func (r *Repository) HasAnyRole(
+	userID uint,
+	roleSlugs ...string,
+) (bool, error) {
+	var count int64
+
+	err := r.db.
+		Table("roles").
+		Joins(
+			"JOIN user_roles ON user_roles.role_id = roles.id",
+		).
+		Where(
+			"user_roles.user_id = ? AND roles.slug IN ?",
+			userID,
+			roleSlugs,
+		).
+		Count(&count).
+		Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}

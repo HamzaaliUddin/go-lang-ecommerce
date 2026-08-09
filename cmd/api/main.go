@@ -46,6 +46,8 @@ func main() {
 	app := router.New(
 		dependencies.AuthHandler,
 		dependencies.UserHandler,
+		dependencies.AuthMiddleware,
+		dependencies.RoleMiddleware,
 	)
 
 	if err := app.Run(":" + cfg.AppPort); err != nil {

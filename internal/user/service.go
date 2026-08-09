@@ -85,3 +85,13 @@ func (s *Service) Delete(id uint) error {
 
 	return nil
 }
+
+func (s *Service) HasAnyRole(
+	userID uint,
+	roles ...string,
+) (bool, error) {
+	return s.repository.HasAnyRole(
+		userID,
+		roles...,
+	)
+}

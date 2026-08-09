@@ -5,13 +5,15 @@ import (
 	"ecommerce-api/internal/config"
 	"ecommerce-api/internal/role"
 	"ecommerce-api/internal/user"
-
+	appMiddleware "ecommerce-api/internal/http/middleware"
 	"gorm.io/gorm"
 )
 
 type AppDependencies struct {
-	AuthHandler *auth.Handler
-	UserHandler *user.Handler
+	AuthHandler    *auth.Handler
+	UserHandler    *user.Handler
+	AuthMiddleware *appMiddleware.AuthMiddleware
+	RoleMiddleware *appMiddleware.RoleMiddleware
 }
 
 func buildDependencies(
@@ -36,11 +38,20 @@ func buildDependencies(
 	userService := user.NewService(
 		userRepository,
 	)
+		authMiddleware := appMiddleware.NewAuth(
+		cfg.JWTSecret,
+	)
+
+	roleMiddleware := appMiddleware.NewRole(
+		userService,
+	)
 
 	userHandler := user.NewHandler(userService)
 
 	return AppDependencies{
 		AuthHandler: authHandler,
 		UserHandler: userHandler,
+		AuthMiddleware: authMiddleware,
+		RoleMiddleware: roleMiddleware,
 	}
 }
