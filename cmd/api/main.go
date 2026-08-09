@@ -44,8 +44,11 @@ func main() {
 	
 	userRepository := user.NewRepository(db)
 
+	roleRepository := role.NewRepository(db)
+
 	authService := auth.NewService(
 		userRepository,
+		roleRepository,
 		cfg.JWTSecret,
 )
 

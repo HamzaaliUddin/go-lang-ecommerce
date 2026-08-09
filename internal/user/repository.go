@@ -2,7 +2,7 @@ package user
 
 import (
 	"errors"
-
+	"ecommerce-api/internal/role"
 	"gorm.io/gorm"
 )
 
@@ -34,4 +34,23 @@ func (r *Repository) FindByEmail(email string) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+func (r *Repository) CreateWithRole(
+	account *User,
+	assignedRole role.Role,
+) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(account).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Model(account).
+			Association("Roles").
+			Append(&assignedRole); err != nil {
+			return err
+		}
+
+		return nil
+	})
 }

@@ -53,3 +53,40 @@ func (h *Handler) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *Handler) SignUp(c *gin.Context) {
+	var request SignUpRequest
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid request",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	response, err := h.service.SignUp(request)
+
+	if err != nil {
+		if errors.Is(err, ErrEmailAlreadyExists) {
+			c.JSON(http.StatusConflict, gin.H{
+				"message": "email already exists",
+			})
+			return
+		}
+
+		if errors.Is(err, ErrPasswordTooLong) {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "password is too long",
+			})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "internal server error",
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, response)
+}

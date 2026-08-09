@@ -12,4 +12,5 @@ func RegisterRoutes(
 		"/login",
 		handler.Login,
 	)
+	authRoutes.POST("/sign-up", handler.SignUp)
 }
