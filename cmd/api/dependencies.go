@@ -3,15 +3,18 @@ package main
 import (
 	"ecommerce-api/internal/auth"
 	"ecommerce-api/internal/config"
+	appMiddleware "ecommerce-api/internal/http/middleware"
+	"ecommerce-api/internal/product"
 	"ecommerce-api/internal/role"
 	"ecommerce-api/internal/user"
-	appMiddleware "ecommerce-api/internal/http/middleware"
+
 	"gorm.io/gorm"
 )
 
 type AppDependencies struct {
 	AuthHandler    *auth.Handler
 	UserHandler    *user.Handler
+	ProductHandler *product.Handler
 	AuthMiddleware *appMiddleware.AuthMiddleware
 	RoleMiddleware *appMiddleware.RoleMiddleware
 }
@@ -24,6 +27,7 @@ func buildDependencies(
 	// Repositories
 	userRepository := user.NewRepository(db)
 	roleRepository := role.NewRepository(db)
+	productRepository := product.NewRepository(db)
 
 	// Auth
 	authService := auth.NewService(
@@ -48,9 +52,17 @@ func buildDependencies(
 
 	userHandler := user.NewHandler(userService)
 
+	// Product
+	productService := product.NewService(
+		productRepository,
+	)
+
+	productHandler := product.NewHandler(productService)
+
 	return AppDependencies{
 		AuthHandler: authHandler,
 		UserHandler: userHandler,
+		ProductHandler: productHandler,
 		AuthMiddleware: authMiddleware,
 		RoleMiddleware: roleMiddleware,
 	}

@@ -5,6 +5,7 @@ import (
 	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/permission"
 	"ecommerce-api/internal/platform/database"
+	"ecommerce-api/internal/product"
 	"ecommerce-api/internal/role"
 	"ecommerce-api/internal/seed"
 	"ecommerce-api/internal/user"
@@ -31,7 +32,9 @@ func main() {
 	if err := db.AutoMigrate(
 		&permission.Permission{},
 		&role.Role{},
-		&user.User{}); err != nil {
+		&user.User{},
+		&product.Product{},
+		); err != nil {
 		log.Fatal("database migration failed: ", err)
 	}
 
@@ -46,6 +49,7 @@ func main() {
 	app := router.New(
 		dependencies.AuthHandler,
 		dependencies.UserHandler,
+		dependencies.ProductHandler,
 		dependencies.AuthMiddleware,
 		dependencies.RoleMiddleware,
 	)
