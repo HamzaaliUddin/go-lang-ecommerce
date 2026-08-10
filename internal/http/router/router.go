@@ -7,7 +7,7 @@ import (
 	appMiddleware "ecommerce-api/internal/http/middleware"
 	"ecommerce-api/internal/product"
 	"ecommerce-api/internal/user"
-
+	"ecommerce-api/internal/banner"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +15,7 @@ func New(
 	authHandler *auth.Handler,
 	userHandler *user.Handler,
 	productHandler *product.Handler,
+	bannerHandler *banner.Handler,
 	authMiddleware *appMiddleware.AuthMiddleware,
 	roleMiddleware *appMiddleware.RoleMiddleware,
 ) *gin.Engine {
@@ -43,6 +44,13 @@ func New(
 	user.RegisterRoutes(
 		api,
 		userHandler,
+		authMiddleware.RequireAuth(),
+		roleMiddleware.Require,
+	)
+
+	banner.RegisterRoutes(
+		api,
+		bannerHandler,
 		authMiddleware.RequireAuth(),
 		roleMiddleware.Require,
 	)

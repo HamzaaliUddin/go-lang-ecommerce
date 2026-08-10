@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ecommerce-api/internal/banner"
 	"ecommerce-api/internal/config"
 	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/permission"
@@ -34,6 +35,7 @@ func main() {
 		&role.Role{},
 		&user.User{},
 		&product.Product{},
+		&banner.Banner{},
 		); err != nil {
 		log.Fatal("database migration failed: ", err)
 	}
@@ -50,6 +52,7 @@ func main() {
 		dependencies.AuthHandler,
 		dependencies.UserHandler,
 		dependencies.ProductHandler,
+		dependencies.BannerHandler,
 		dependencies.AuthMiddleware,
 		dependencies.RoleMiddleware,
 	)
