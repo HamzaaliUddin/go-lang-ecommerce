@@ -7,6 +7,7 @@ import (
 	"ecommerce-api/internal/config"
 	"ecommerce-api/internal/http/router"
 	"ecommerce-api/internal/order"
+	"ecommerce-api/internal/payment"
 	"ecommerce-api/internal/permission"
 	"ecommerce-api/internal/platform/database"
 	"ecommerce-api/internal/product"
@@ -43,6 +44,7 @@ func main() {
 		&banner.Banner{},
 		&order.Order{},
 	  &order.OrderItem{},
+		&payment.Payment{},
 		); err != nil {
 		log.Fatal("database migration failed: ", err)
 	}
@@ -63,6 +65,7 @@ func main() {
 		dependencies.categoryHanler,
 		dependencies.cartHandler,
 		dependencies.OrderHandler,
+		dependencies.PaymentHandler,
 		dependencies.AuthMiddleware,
 		dependencies.RoleMiddleware,
 	)
