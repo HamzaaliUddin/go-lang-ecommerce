@@ -3,6 +3,7 @@ package main
 import (
 	"ecommerce-api/internal/auth"
 	"ecommerce-api/internal/banner"
+	"ecommerce-api/internal/cart"
 	"ecommerce-api/internal/category"
 	"ecommerce-api/internal/config"
 	appMiddleware "ecommerce-api/internal/http/middleware"
@@ -19,6 +20,7 @@ type AppDependencies struct {
 	BannerHandler  *banner.Handler
 	ProductHandler *product.Handler
 	categoryHanler *category.Handler
+	cartHandler    *cart.Handler
 	AuthMiddleware *appMiddleware.AuthMiddleware
 	RoleMiddleware *appMiddleware.RoleMiddleware
 }
@@ -34,6 +36,7 @@ func buildDependencies(
 	productRepository := product.NewRepository(db)
 	bannerRepository := banner.NewRepository(db)
 	categoryRepository := category.NewRepository(db)
+	cartRepository := cart.NewRepository(db)
 
 	// Auth
 	authService := auth.NewService(
@@ -78,12 +81,19 @@ func buildDependencies(
 
 	categoryHandler := category.NewHandler(categoryService)
 
+	// Cart
+	cartService := cart.NewService(cartRepository,productRepository)
+
+	cartHandler := cart.NewHandler(cartService)
+
+
 	return AppDependencies{
 		AuthHandler: authHandler,
 		UserHandler: userHandler,
 		BannerHandler: bannerHandler,
 		ProductHandler: productHandler,
 		categoryHanler: categoryHandler,
+		cartHandler: cartHandler,
 		AuthMiddleware: authMiddleware,
 		RoleMiddleware: roleMiddleware,
 	}

@@ -5,6 +5,7 @@ import (
 
 	"ecommerce-api/internal/auth"
 	"ecommerce-api/internal/banner"
+	"ecommerce-api/internal/cart"
 	"ecommerce-api/internal/category"
 	appMiddleware "ecommerce-api/internal/http/middleware"
 	"ecommerce-api/internal/product"
@@ -19,6 +20,7 @@ func New(
 	productHandler *product.Handler,
 	bannerHandler *banner.Handler,
 	categoryHandler *category.Handler,
+	cartHandler *cart.Handler,
 	authMiddleware *appMiddleware.AuthMiddleware,
 	roleMiddleware *appMiddleware.RoleMiddleware,
 ) *gin.Engine {
@@ -71,6 +73,12 @@ func New(
 	authMiddleware.RequireAuth(),
 	roleMiddleware.Require,
   )	
+
+	cart.RegisterRoutes(
+		api,
+		cartHandler,
+		authMiddleware.RequireAuth(),
+	)
 
 	return router
 }
