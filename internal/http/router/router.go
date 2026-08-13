@@ -8,6 +8,7 @@ import (
 	"ecommerce-api/internal/cart"
 	"ecommerce-api/internal/category"
 	appMiddleware "ecommerce-api/internal/http/middleware"
+	"ecommerce-api/internal/order"
 	"ecommerce-api/internal/product"
 	"ecommerce-api/internal/user"
 
@@ -21,6 +22,7 @@ func New(
 	bannerHandler *banner.Handler,
 	categoryHandler *category.Handler,
 	cartHandler *cart.Handler,
+	orderHandler *order.Handler,
 	authMiddleware *appMiddleware.AuthMiddleware,
 	roleMiddleware *appMiddleware.RoleMiddleware,
 ) *gin.Engine {
