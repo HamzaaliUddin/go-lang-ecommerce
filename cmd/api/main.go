@@ -53,6 +53,7 @@ func main() {
 		dependencies.UserHandler,
 		dependencies.ProductHandler,
 		dependencies.BannerHandler,
+		dependencies.categoryHanler,
 		dependencies.AuthMiddleware,
 		dependencies.RoleMiddleware,
 	)

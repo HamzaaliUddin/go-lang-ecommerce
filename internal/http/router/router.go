@@ -4,10 +4,12 @@ import (
 	"net/http"
 
 	"ecommerce-api/internal/auth"
+	"ecommerce-api/internal/banner"
+	"ecommerce-api/internal/category"
 	appMiddleware "ecommerce-api/internal/http/middleware"
 	"ecommerce-api/internal/product"
 	"ecommerce-api/internal/user"
-	"ecommerce-api/internal/banner"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +18,7 @@ func New(
 	userHandler *user.Handler,
 	productHandler *product.Handler,
 	bannerHandler *banner.Handler,
+	categoryHandler *category.Handler,
 	authMiddleware *appMiddleware.AuthMiddleware,
 	roleMiddleware *appMiddleware.RoleMiddleware,
 ) *gin.Engine {
@@ -61,6 +64,13 @@ func New(
 		authMiddleware.RequireAuth(),
 		roleMiddleware.Require,
 	)
+
+	category.RegisterRoutes(
+	api,
+	categoryHandler,
+	authMiddleware.RequireAuth(),
+	roleMiddleware.Require,
+  )	
 
 	return router
 }
